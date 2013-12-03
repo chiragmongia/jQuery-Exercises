@@ -8,17 +8,11 @@ SlideDown.prototype = {
   },
 
   bindEvents: function() {
-    $('#blog a').bind('click', this.displayParagraph);
-  },
-
-  displayParagraph: function() {
-    slidedown.slideUpAllParagraph();
-    $(this).removeAttr('href');
-    $(this).parent().next('p.excerpt').slideDown();
-  },
-
-  slideUpAllParagraph: function() {
-    $('div p.excerpt').slideUp();
+    $('#blog .heading-link').bind('click', function() {
+      $('#blog .excerpt').slideUp();
+      $(this).removeAttr('href');
+      $("." + $(this).attr('id') + "-excerpt").slideDown();
+    });
   }
 }
 
