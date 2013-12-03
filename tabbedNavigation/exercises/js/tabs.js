@@ -13,7 +13,13 @@ TabbedNavigation.prototype = {
   },
 
   bindEvents: function() {
-    this.newUnorderedList.children().bind('click', this.showCurrentModule);
+    $('li.tabs').bind('click', function() {
+      $currentLi = $(this);
+      $('li.tabs').removeClass('current');
+      $('div.module').hide();
+      $('#' + $currentLi.attr('data-module-id')).show();
+      $currentLi.addClass('current');
+    });
   },
 
   hideAllDivModules: function() {
@@ -27,27 +33,11 @@ TabbedNavigation.prototype = {
   createTabsForNavigation: function() {
     var obj = this;
     this.divModule.each(function() {
-      var newListItem = $('<li></li>');
+      var newListItem = $('<li class="tabs"></li>').attr('data-module-id', $(this).attr('id'));
       newListItem.append($(this).find('h2').html());
       newListItem.appendTo(obj.newUnorderedList);
     })
   },
-
-  showCurrentModule: function() {
-    $currentLi = $(this);
-    $('div.module').each(function() {
-      if ( $currentLi.html().toLowerCase() == $(this).attr('id'))
-        $(this).show();
-      else
-        $(this).hide();
-    })
-
-    $currentLi.parent().children().each(function() { 
-      $(this).removeClass('current'); 
-    });
-    
-    $currentLi.addClass('current');
-  }
 }
 
 var tabbedNavigation = new TabbedNavigation();
