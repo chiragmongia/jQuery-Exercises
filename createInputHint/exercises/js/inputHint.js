@@ -1,11 +1,11 @@
-var InputHint = function() {
+var InputHint = function(searchInputField, searchLabel) {
+  this.searchInputField = searchInputField;
+  this.searchLabel      = searchLabel;
   this.init();
 }
 
 InputHint.prototype = {
   init: function() {
-    this.searchInputField = $('input.input_text');
-    this.searchLabel      = $('#search label');
     this.setSearchInput();
     this.addClasstoSearchInput();
     this.removeSearchLabel();
@@ -15,7 +15,11 @@ InputHint.prototype = {
   bindEvents: function() {
     var obj = this;
     this.searchInputField.bind({
-      'focus': this.removeInputTextAndClass,
+      // Bind a focus event to the search input that removes the hint text and the "hint" class
+      'focus': function() {
+        $(this).attr('value', '').removeClass('hint');
+      }, 
+
       'blur': function() {
         obj.restoreInputTextAndClass();
       }
@@ -38,11 +42,6 @@ InputHint.prototype = {
     this.searchLabel.detach();
   },
 
-  // Bind a focus event to the search input that removes the hint text and the "hint" class
-  removeInputTextAndClass: function() {
-    $(this).attr('value', '').removeClass('hint');
-  },
-
   // Bind a blur event to the search input that restores the hint text and "hint" class if no search text was entered
   restoreInputTextAndClass: function() {
     if (!this.searchInputField.attr('value')) {
@@ -52,4 +51,4 @@ InputHint.prototype = {
   }
 }
 
-var hint = new InputHint();
+var hint = new InputHint($('input.input_text'), $('#search .search-label'));
