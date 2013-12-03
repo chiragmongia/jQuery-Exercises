@@ -8,15 +8,17 @@ DropDown.prototype = {
   },
 
   bindEvents: function() {
-    $('#nav').children().hover(this.showSubMenu, this.hideSubMenu);
-  },
+    $('.nav-links').hover(
+      function() {
+        $(this).addClass('selected');
+        $(this).children('.sub-menu').addClass('hover');
+      },
 
-  showSubMenu: function() {
-    $(this).children('ul').addClass('hover');
-  },
-
-  hideSubMenu: function() {
-    $(this).children('ul').removeClass('hover');
+      function() {
+        $(this).removeClass('selected');
+        $(this).children('.sub-menu').removeClass('hover');
+      }
+    );
   }
 }
 
