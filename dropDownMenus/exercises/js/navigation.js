@@ -11,12 +11,12 @@ DropDown.prototype = {
     $('.nav-links').hover(
       function() {
         $(this).addClass('selected');
-        $(this).children('.sub-menu').addClass('hover');
+        $(this).find('.sub-menu').addClass('hover');
       },
 
       function() {
         $(this).removeClass('selected');
-        $(this).children('.sub-menu').removeClass('hover');
+        $(this).find('.sub-menu').removeClass('hover');
       }
     );
   }
