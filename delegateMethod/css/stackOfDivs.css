@@ -1,0 +1,37 @@
+.container-children {
+  width: 70px;
+  height: 70px;
+  border: solid 1px;
+  border-radius: 4px;
+  background: #DDDDDD;
+  margin: 10px 65px; 
+}
+
+.highlight {
+  background: yellow;
+  border: solid 2px;
+}
+
+#div-container {
+  text-align: center;
+}
+
+#addBtn {
+  position: absolute;
+  top: 109px;
+  left: 273px;
+  width: 90px;
+  background: black;
+  color: white;
+  padding: 7px;
+  font-size: 17px;
+  font-style: italic;
+  border: solid 1px;
+  border-radius: 8px;
+}
+
+h1 {
+  text-shadow: 1px 1px red;
+  margin-bottom: 50px;
+  margin-left: 10px;
+}
