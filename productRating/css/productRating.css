@@ -1,0 +1,51 @@
+.productsBlock {
+  list-style-type: none;
+  margin: 0px 50px;
+  padding: 0px;
+}
+
+.productItem {
+  position: relative;
+  top: 22px;
+  margin: 7px 0px -9px 0px;
+  padding: 8px 12px 8px 12px;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.ratingBlock {
+  position: relative;
+  margin-left: 120px;
+}
+
+input[type="radio"] {
+  margin: 0px 92px 20px 24px;
+}
+
+.ratingCategoryBlock {
+  list-style-type: none;
+  margin: 0px 0px 0px 100px;
+}
+
+.ratingCategory {
+  display: inline-block;
+  margin: 0px 10px 0px 27px;
+  padding: 8px;
+  cursor: pointer;
+}
+
+#container {
+  font-family: Helvetica;
+  font-size: 21px;
+  margin: 50px 0px 0px 50px;
+}
+
+.selectedItem {
+  background: #DCE4EC;
+  border: solid 1px #C4CFEC;
+}
+
+.selectedRatingCategory {
+  background: #DCE4EC;
+  border: solid 1px #C4CFEC;
+}

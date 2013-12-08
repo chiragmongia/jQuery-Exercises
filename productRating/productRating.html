@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="css/productRating.css">
+  </head>
+  <body>
+    <div id="container">
+      <ul class="ratingCategoryBlock">
+        <li class="ratingCategory" data-class-name="loveIt">Love it</li>
+        <li class="ratingCategory" data-class-name="likeIt">Like it</li>
+        <li class="ratingCategory" data-class-name="noViews">No Views</li>
+        <li class="ratingCategory" data-class-name="dislikeIt">Dislike it</li>
+        <li class="ratingCategory" data-class-name="abhorIt">Abhor it</li>
+      </ul>
+
+      <ul class="productsBlock">
+        <li class="productItem" id="coffee">Coffee</li>
+        <div class="ratingBlock">
+          <input type="radio" id="love-coffee" class="loveIt" name="coffee" data-item-id="coffee">
+          <input type="radio" id="like-coffee" class="likeIt" name="coffee" data-item-id="coffee">
+          <input type="radio" id="noViews-coffee" class="noViews" name="coffee" data-item-id="coffee">
+          <input type="radio" id="dislikeIt-coffee" class="dislikeIt" name="coffee" data-item-id="coffee">
+          <input type="radio" id="abhorIt-coffee" class="abhorIt" name="coffee" data-item-id="coffee">
+        </div>
+
+        <li class="productItem" id="tea">Tea</li>
+        <div class="ratingBlock">
+          <input type="radio" id="love-tea" class="loveIt" name="tea" data-item-id="tea">
+          <input type="radio" id="like-tea" class="likeIt" name="tea" data-item-id="tea">
+          <input type="radio" id="noViews-tea" class="noViews" name="tea" data-item-id="tea">
+          <input type="radio" id="dislikeIt-tea" class="dislikeIt" name="tea" data-item-id="tea">
+          <input type="radio" id="abhorIt-tea" class="abhorIt" name="tea" data-item-id="tea">
+        </div>
+
+        <li class="productItem" id="sodas">Sodas</li>
+        <div class="ratingBlock">
+          <input type="radio" id="love-sodas" class="loveIt" name="sodas" data-item-id="sodas">
+          <input type="radio" id="like-sodas" class="likeIt" name="sodas" data-item-id="sodas">
+          <input type="radio" id="noViews-sodas" class="noViews" name="sodas" data-item-id="sodas">
+          <input type="radio" id="dislikeIt-sodas" class="dislikeIt" name="sodas" data-item-id="sodas">
+          <input type="radio" id="abhorIt-sodas" class="abhorIt" name="sodas" data-item-id="sodas">
+        </div>
+      </ul>
+    </div>
+
+    <script src="libs/jQuery_v2.0.3.js"></script>
+    <script src="js/productRating.js" type="text/javascript"></script>
+  </body>
+</html>
