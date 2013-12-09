@@ -4,25 +4,39 @@ var LoadingJsonContent = function() {
 
 LoadingJsonContent.prototype = {
   init: function() {
+    this.cachedResponse = {};
     this.createDivAfterForm();
     this.createUserDetailsParaElement();
     this.bindEvents();
   },
 
   bindEvents: function() {
-    var obj = this
+    var obj = this;
     $('.days-select').bind('change', function() {
-      $.ajax({
-        url:      'data/specials.json',
-        type:     'GET',
-        dataType: 'json',
-        success: function(json) {
-          $('.user-details-container').show();
-          obj.populateUserDetailsParaElement(json[$('.days-select').val()].title, json[$('.days-select').val()].text, json[$('.days-select').val()].image, json[$('.days-select').val()].color);
-          obj.removeFormSubmitBtn();
-        },
-      });
-    })
+      if ( $('.days-select').val() ) {
+        if ( jQuery.isEmptyObject(obj.cachedResponse) ) {
+          $.ajax({
+            url:      'data/specials.json',
+            type:     'GET',
+            dataType: 'json',
+            success: function(json) {
+              obj.cachedResponse = json;
+              successCallback(json);
+            },
+          });
+        }
+
+        else {
+          successCallback(obj.cachedResponse);
+        }
+      }
+    });
+
+    function successCallback(json) {
+      $('.user-details-container').show();
+      obj.populateUserDetailsParaElement(json[$('.days-select').val()].title, json[$('.days-select').val()].text, json[$('.days-select').val()].image, json[$('.days-select').val()].color);
+      obj.removeFormSubmitBtn();
+    }
   },
 
   createDivAfterForm: function() {
