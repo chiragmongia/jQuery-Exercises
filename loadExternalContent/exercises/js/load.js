@@ -12,15 +12,22 @@ ContentLoading.prototype = {
   },
 
   bindEvents: function() {
-    $('h3 a').bind('click', function() {
-      $(this).removeAttr('href');
-      $(this).closest('h3').siblings('div.blog-content').load('data/blog.html' + ' #' + $(this).attr('data-id'));
+    $('h3 a').bind('click', function(event) {
+      event.preventDefault();
+      $('#' + $(this).attr('targetDiv')).load('data/blog.html' + ' #' + $(this).attr('data-id'));
     })
   },
 
   insertDivAfterBlogHeading: function() {
     var $divElement = $('<div class="blog-content"></div>');
     $divElement.insertAfter('h3');
+    $('.blog-content').each(function(index) {
+      $(this).attr('id', index+1);
+    })
+
+    $('h3 a').each(function() {
+      $(this).attr('targetDiv', $(this).closest('h3').siblings('div.blog-content').attr('id'));
+    });
   },
 
   addDataToHeadingLinks: function() {
