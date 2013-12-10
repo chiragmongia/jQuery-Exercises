@@ -6,12 +6,12 @@ ProductRating.prototype = {
   init: function() {
     this.ratingTypes = ['Love it', 'Like it', 'No Views', 'Dislike it', 'Abhor it'];
     this.productItems = ['Coffee', 'Tea', 'Sodas'];
-    this.createDynamicRatingTypes();
-    this.createDynamicProducts();
+    this.createRatingTypes();
+    this.createProducts();
     this.bindEvents();
   },
 
-  createDynamicRatingTypes: function() {
+  createRatingTypes: function() {
     var $ratingBlock = $('<ul class="ratingCategoryBlock"></ul>');
     $ratingBlock.appendTo($('#container'));
     for (var i = 0; i < this.ratingTypes.length; i++) {
@@ -22,7 +22,7 @@ ProductRating.prototype = {
     }
   },
 
-  createDynamicRadioButtons: function() {
+  createRadioButtons: function() {
     var $productItemBlock = $('<ul class="radioBlock"></ul>');
     for(var i = 0; i < this.ratingTypes.length; i++) {
       var $radioListItem = $('<li class="radioItem"><input type="radio"></li>');
@@ -40,7 +40,7 @@ ProductRating.prototype = {
     });
   },
 
-  createDynamicProducts: function() {
+  createProducts: function() {
     for (var i = 0; i < this.productItems.length; i++) {
       var $productDiv = $('<div class="productsBlock"></div>');
       $productDiv.appendTo($('#container'));
@@ -49,7 +49,7 @@ ProductRating.prototype = {
       $productNameElement.attr('id', this.productItems[i]);
       $productNameElement.appendTo($productDiv);
 
-      var $radioButtons = this.createDynamicRadioButtons();
+      var $radioButtons = this.createRadioButtons();
       this.setRadioButtonAttr($radioButtons, this.productItems[i]);
       $radioButtons.appendTo($productDiv);
     }
@@ -57,25 +57,35 @@ ProductRating.prototype = {
 
   bindEvents: function() {
     $('.productItem').bind('click', function() {
-      $('.productItem').removeClass('selectedProduct').removeClass('selectedItem');
-      $(this).addClass('selectedProduct').addClass('selectedItem');
-      setRadioButtonState();
+      $('.productItem').removeClass('selectedProduct highlight');
+      $(this).addClass('selectedProduct highlight');
+      $('.ratingCategory').removeClass('highlight selectedRatingCategory');
+
+      if ($(this).hasClass('rated')) {
+        $('.selectedProduct').data('selected-category').addClass('highlight');
+      }
+
+      else {
+        $(this).addClass('rated');
+      }
     });
 
     $('.ratingCategory').bind('click', function() {
-      if ($('.productItem').hasClass('selectedItem')) {
-        $(this).siblings().removeClass('selectedRatingCategory').removeClass('selectedItem');
-        $(this).addClass('selectedRatingCategory').addClass('selectedItem');
+      if ($('.productItem').hasClass('highlight')) {
+        $(this).siblings().removeClass('selectedRatingCategory highlight');
+        $(this).addClass('selectedRatingCategory highlight');
+        $('.selectedProduct').data('selected-category', $('.selectedRatingCategory'));
         setRadioButtonState();
       }
     });
 
     $('.radioItem').find('input').bind('click', function() {
-      $('.productItem').removeClass('selectedItem').removeClass('selectedProduct');
-      $('.ratingCategory').removeClass('selectedItem').removeClass('selectedRatingCategory');
+      $('.productItem').removeClass('highlight selectedProduct');
+      $('.ratingCategory').removeClass('highlight selectedRatingCategory');
       var tempArray = $(this).attr('id').split('-');
-      $('#' + tempArray[0]).addClass('selectedItem').addClass('selectedProduct');
-      $('#' + tempArray[1]).addClass('selectedItem').addClass('selectedRatingCategory');
+      $('#' + tempArray[0]).addClass('highlight selectedProduct rated');
+      $('#' + tempArray[1]).addClass('highlight selectedRatingCategory');
+      $('.selectedProduct').data('selected-category', $('.selectedRatingCategory'));
     })
 
     function setRadioButtonState() {
