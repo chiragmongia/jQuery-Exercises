@@ -6,32 +6,29 @@ var ContentLoading = function() {
 
 ContentLoading.prototype = {
   init: function() {
+    this.headingLinks = $('h3 a');
     this.insertDivAfterBlogHeading();
     this.addDataToHeadingLinks();
     this.bindEvents();
   },
 
   bindEvents: function() {
-    $('h3 a').bind('click', function(event) {
+    this.headingLinks.bind('click', function(event) {
       event.preventDefault();
-      $('#' + $(this).attr('targetDiv')).load('data/blog.html' + ' #' + $(this).attr('data-id'));
+      $(this).data('targetDiv').load('data/blog.html' + ' #' + $(this).attr('data-id'));
     })
   },
 
   insertDivAfterBlogHeading: function() {
-    var $divElement = $('<div class="blog-content"></div>');
-    $divElement.insertAfter('h3');
-    $('.blog-content').each(function(index) {
-      $(this).attr('id', index+1);
-    })
-
-    $('h3 a').each(function() {
-      $(this).attr('targetDiv', $(this).closest('h3').siblings('div.blog-content').attr('id'));
+   this.headingLinks.each(function() {
+      var $divElement = $('<div class="blog-content"></div>');
+      $(this).data('targetDiv', $divElement );
+      $divElement.insertAfter($(this).closest('h3'));
     });
   },
 
   addDataToHeadingLinks: function() {
-    $('h3 a').each(function() {
+    this.headingLinks.each(function() {
       var tempArray,
           id;
       tempArray = $(this).attr('href').split('#');
