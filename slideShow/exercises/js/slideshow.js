@@ -35,7 +35,7 @@ SlideShow.prototype = {
   createImageNumberParagraph: function() {
     var $numElement = $('<p class="currentImageElement">Image Number: </p>');
     $numElement.insertAfter(this.slideShowBlock);
-    this.createImageNumbers($numElement);    
+    this.createImageNumbers($numElement);
   },
 
   moveSlidesBlockOnTop: function() {
@@ -44,7 +44,7 @@ SlideShow.prototype = {
 
   // Creating Image Numbers for the total number of slides
   createImageNumbers: function(imageNumberParagraph) {
-    this.slideContainer.each( function(index) { 
+    this.slideContainer.each( function(index) {
       var imageNumber = $('<span />', { id: ('image-number-' + (index+1)), text: (index+1), class: 'imageNumber' });
       imageNumber.appendTo(imageNumberParagraph);
     });
