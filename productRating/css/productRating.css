@@ -9,7 +9,7 @@
   top: 22px;
   margin: 7px 0px -9px 0px;
   padding: 8px 12px 8px 12px;
-  display: inline-block;
+  display: inline;
   cursor: pointer;
 }
 
@@ -20,7 +20,7 @@
 
 .ratingCategoryBlock {
   list-style-type: none;
-  margin: 0px 0px 0px 100px;
+  margin: 0px 0px 20px 100px;
 }
 
 .ratingCategory {
@@ -36,7 +36,7 @@
   margin: 50px 0px 0px 50px;
 }
 
-.selectedItem {
+.highlight {
   background: #DCE4EC;
   border: solid 1px #C4CFEC;
 }
