@@ -16,20 +16,24 @@ SlideShow.prototype = {
   },
 
   startSlideShow: function() {
+    var obj = this;
     $('#image-number-1').addClass('currentSlide');
-    setInterval(this.displaySlides, 4000);  
+    setInterval(function() {
+      obj.displaySlides();
+    }, 4000);
   },
 
   displaySlides: function() {
+    var obj = this;
     $('#slideshow li:first').animate({
       'opacity':0,
     }, 1000, function() {
-      $(this).appendTo($('#slideshow'));
-      $(this).animate({ 'opacity':1 }, 1000);
-      $('#image-number-' + $('.slide-container:visible').attr('data-slide-number')).addClass('currentSlide');
+      $(this).appendTo(obj.slideShowBlock)
+        .animate({ 'opacity':1 }, 1000);
+      $('#image-number-' + obj.slideContainer.filter(':visible').attr('data-slide-number')).addClass('currentSlide');
     });
 
-    $('#image-number-' + $('.slide-container:visible').attr('data-slide-number')).removeClass('currentSlide');
+    $('#image-number-' + obj.slideContainer.filter(':visible').attr('data-slide-number')).removeClass('currentSlide');
   },
 
   createImageNumberParagraph: function() {
