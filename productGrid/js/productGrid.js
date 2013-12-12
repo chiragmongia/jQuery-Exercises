@@ -4,6 +4,7 @@ var ProductGrid = function() {
 
 ProductGrid.prototype = {
   init: function() {
+    this.filters = $('.filter');
     this.fetchJsonData();
     this.bindEvents();
   },
@@ -40,18 +41,22 @@ ProductGrid.prototype = {
   },
 
   findMaxSelectedOptionsFilter: function() {
-    var checkedOptionsCountForEachFilter = [],
-        filtersArray = [],
-        indexWithMaxVal;
+    var maxSelectedOptionsFilter = this.filters[0],
+        checkCount = 0;
 
-    filtersArray = $('.filter').each(function() {
-      checkedOptionsCountForEachFilter.push($(this).find('input:checked').length);
+    this.filters.each(function() {
+      var checkedOptions = $(this).find('input:checked').length;
+      if (checkedOptions > checkCount) {
+        maxSelectedOptionsFilter = this;
+        checkCount = checkedOptions;
+      }
     });
-    indexWithMaxVal = checkedOptionsCountForEachFilter.indexOf(Math.max.apply(Math, checkedOptionsCountForEachFilter));
-    return filtersArray[indexWithMaxVal];
+
+    return maxSelectedOptionsFilter;
   },
 
-  generateFilterStringForMaxSelectedOptionsFilter: function($maxSelectedOptionsFilter, selectedImgContainerArray) {
+  generateFilterStringForMaxSelectedOptionsFilter: function($maxSelectedOptionsFilter) {
+    var selectedImgContainerArray = [];
     $maxSelectedOptionsFilter.find('input:checked').each(function() {
       var selectedImgContainer = "",
           filterName;
@@ -77,8 +82,8 @@ ProductGrid.prototype = {
     var $maxSelectedOptionsFilter = $(this.findMaxSelectedOptionsFilter()),
         selectedImgContainerArray = [];
 
-    selectedImgContainerArray = this.generateFilterStringForMaxSelectedOptionsFilter($maxSelectedOptionsFilter, selectedImgContainerArray);
-    $maxSelectedOptionsFilter.siblings().each(function() {
+    selectedImgContainerArray = this.generateFilterStringForMaxSelectedOptionsFilter($maxSelectedOptionsFilter);
+    $maxSelectedOptionsFilter.siblings('.filter').each(function() {
       var finalSelectorArray = [];
       $(this).find('input:checked').each(function() {
         var obj = this;
