@@ -11,6 +11,14 @@ ProductRating.prototype = {
     this.bindEvents();
   },
 
+  bindEvents: function() {
+    this.products = $('.productItem');
+    this.ratings  = $('.ratingCategory');
+    this.productItemListener();
+    this.ratingCategoryListener();
+    this.radioButtonListener();
+  },
+
   createRatingTypes: function() {
     var $ratingBlock = $('<ul class="ratingCategoryBlock"></ul>');
     $ratingBlock.appendTo($('#container'));
@@ -23,73 +31,92 @@ ProductRating.prototype = {
   },
 
   createRadioButtons: function() {
-    var $productItemBlock = $('<ul class="radioBlock"></ul>');
+    var $radioBlock = $('<ul class="radioBlock"></ul>');
     for(var i = 0; i < this.ratingTypes.length; i++) {
       var $radioListItem = $('<li class="radioItem"><input type="radio"></li>');
-      $radioListItem.appendTo($productItemBlock);
+      $radioListItem.appendTo($radioBlock);
       $radioListItem.find('input').attr('class', this.ratingTypes[i].split(" ").join(""));
     }
-    return $productItemBlock;
+    return $radioBlock;
   },
 
   setRadioButtonAttr: function(radioButtonsBlock, productItem) {
+    var obj = this;
     radioButtonsBlock.find('input').attr('name', productItem).attr('data-item-id', productItem);
     $('.ratingCategory').each(function(index) {
-      var tempVar = productItem + "-" + $(this).attr('id');
-      radioButtonsBlock.find('input').eq(index).attr('id', tempVar);
+      var radioButtonId = obj.generateRadioButtonId(this, productItem);
+      radioButtonsBlock.find('input').eq(index).attr('id', radioButtonId);
     });
+  },
+
+  generateRadioButtonId: function(radioButton, productItem) {
+    var $radioButton = $(radioButton),
+        tempVar      = productItem + "-" + $radioButton.attr('id');
+    return tempVar;
   },
 
   createProducts: function() {
     for (var i = 0; i < this.productItems.length; i++) {
-      var $productDiv = $('<div class="productsBlock"></div>');
-      $productDiv.appendTo($('#container'));
+      var $productsBlock = $('<div class="productsBlock"></div>');
+      $productsBlock.appendTo($('#container'));
 
       var $productNameElement = $('<p class="productItem">' + this.productItems[i] + '</p>');
       $productNameElement.attr('id', this.productItems[i]);
-      $productNameElement.appendTo($productDiv);
+      $productNameElement.appendTo($productsBlock);
 
-      var $radioButtons = this.createRadioButtons();
-      this.setRadioButtonAttr($radioButtons, this.productItems[i]);
-      $radioButtons.appendTo($productDiv);
+      var $radioButtonsBlock = this.createRadioButtons();
+      this.setRadioButtonAttr($radioButtonsBlock, this.productItems[i]);
+      $radioButtonsBlock.appendTo($productsBlock);
     }
   },
 
-  bindEvents: function() {
-    $('.productItem').bind('click', function() {
+  productItemListener: function() {
+    var obj = this;
+    this.products.bind('click', function() {
       var $this = $(this);
-      $('.productItem').removeClass('selectedProduct highlight');
+      obj.clearHighlightedProducts();
       $this.addClass('selectedProduct highlight');
-      $('.ratingCategory').removeClass('highlight selectedRatingCategory');
+      obj.clearHighlightedRatings();
 
       if ($this.hasClass('rated')) {
-        $('.selectedProduct').data('selected-category').addClass('highlight');
-      }
-
-      else {
-        $this.addClass('rated');
+        $('#' + $('.selectedProduct').data('selected-category')).addClass('highlight');
       }
     });
+  },
 
-    $('.ratingCategory').bind('click', function() {
-      var $this = $(this);
-      if ($('.productItem').hasClass('highlight')) {
-        $this.siblings().removeClass('selectedRatingCategory highlight');
-        $this.addClass('selectedRatingCategory highlight');
-        $('.selectedProduct').data('selected-category', $('.selectedRatingCategory'));
-        $('#' + $('.selectedProduct').attr('id') + "-" + $('.selectedRatingCategory').attr('id')).prop('checked', true);
-      }
-    });
-
+  radioButtonListener: function() {
+    var obj = this;
     $('.radioItem').find('input').bind('click', function() {
       var $this = $(this);
-      $('.productItem').removeClass('highlight selectedProduct');
-      $('.ratingCategory').removeClass('highlight selectedRatingCategory');
+      obj.clearHighlightedProducts();
+      obj.clearHighlightedRatings();
       var tempArray = $this.attr('id').split('-');
       var selectedProduct  = $('#' + tempArray[0]).addClass('highlight selectedProduct rated');
       var selectedCategory = $('#' + tempArray[1]).addClass('highlight selectedRatingCategory');
-      selectedProduct.data('selected-category', selectedCategory);
-    })
+      selectedProduct.data('selected-category', selectedCategory.attr('id'));
+    });
+  },
+
+  ratingCategoryListener: function() {
+    var obj = this;
+    this.ratings.bind('click', function() {
+      var $this = $(this);
+      if (obj.products.hasClass('highlight')) {
+        $('.selectedProduct').addClass('rated');
+        obj.clearHighlightedRatings();
+        $this.addClass('selectedRatingCategory highlight');
+        $('.selectedProduct').data('selected-category', $('.selectedRatingCategory').attr('id'));
+        $('#' + $('.selectedProduct').attr('id') + "-" + $('.selectedRatingCategory').attr('id')).prop('checked', true);
+      }
+    });
+  },
+
+  clearHighlightedProducts: function() {
+    this.products.removeClass('highlight selectedProduct');
+  },
+
+  clearHighlightedRatings: function() {
+    this.ratings.removeClass('highlight selectedRatingCategory');
   }
 }
 
