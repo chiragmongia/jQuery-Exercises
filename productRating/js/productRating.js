@@ -57,40 +57,39 @@ ProductRating.prototype = {
 
   bindEvents: function() {
     $('.productItem').bind('click', function() {
+      var $this = $(this);
       $('.productItem').removeClass('selectedProduct highlight');
-      $(this).addClass('selectedProduct highlight');
+      $this.addClass('selectedProduct highlight');
       $('.ratingCategory').removeClass('highlight selectedRatingCategory');
 
-      if ($(this).hasClass('rated')) {
+      if ($this.hasClass('rated')) {
         $('.selectedProduct').data('selected-category').addClass('highlight');
       }
 
       else {
-        $(this).addClass('rated');
+        $this.addClass('rated');
       }
     });
 
     $('.ratingCategory').bind('click', function() {
+      var $this = $(this);
       if ($('.productItem').hasClass('highlight')) {
-        $(this).siblings().removeClass('selectedRatingCategory highlight');
-        $(this).addClass('selectedRatingCategory highlight');
+        $this.siblings().removeClass('selectedRatingCategory highlight');
+        $this.addClass('selectedRatingCategory highlight');
         $('.selectedProduct').data('selected-category', $('.selectedRatingCategory'));
-        setRadioButtonState();
+        $('#' + $('.selectedProduct').attr('id') + "-" + $('.selectedRatingCategory').attr('id')).prop('checked', true);
       }
     });
 
     $('.radioItem').find('input').bind('click', function() {
+      var $this = $(this);
       $('.productItem').removeClass('highlight selectedProduct');
       $('.ratingCategory').removeClass('highlight selectedRatingCategory');
-      var tempArray = $(this).attr('id').split('-');
-      $('#' + tempArray[0]).addClass('highlight selectedProduct rated');
-      $('#' + tempArray[1]).addClass('highlight selectedRatingCategory');
-      $('.selectedProduct').data('selected-category', $('.selectedRatingCategory'));
+      var tempArray = $this.attr('id').split('-');
+      var selectedProduct  = $('#' + tempArray[0]).addClass('highlight selectedProduct rated');
+      var selectedCategory = $('#' + tempArray[1]).addClass('highlight selectedRatingCategory');
+      selectedProduct.data('selected-category', selectedCategory);
     })
-
-    function setRadioButtonState() {
-      $('#' + $('.selectedProduct').attr('id') + "-" + $('.selectedRatingCategory').attr('id')).prop('checked', true);
-    }
   }
 }
 
