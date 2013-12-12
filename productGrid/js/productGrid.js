@@ -42,13 +42,13 @@ ProductGrid.prototype = {
 
   findMaxSelectedOptionsFilter: function() {
     var maxSelectedOptionsFilter = this.filters[0],
-        checkCount = 0;
+        initialCheckCount = 0;
 
     this.filters.each(function() {
-      var checkedOptions = $(this).find('input:checked').length;
-      if (checkedOptions > checkCount) {
+      var checkedOptionsCount = $(this).find('input:checked').length;
+      if (checkedOptionsCount > initialCheckCount) {
         maxSelectedOptionsFilter = this;
-        checkCount = checkedOptions;
+        initialCheckCount = checkedOptionsCount;
       }
     });
 
