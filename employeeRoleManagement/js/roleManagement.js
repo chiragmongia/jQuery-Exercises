@@ -157,7 +157,9 @@ RoleManagement.prototype = {
 
       if (confirmDeletion) {
         $('#' + removedEmployeeId).removeClass(parentRolesBlockId);
-        $this.parent('li').remove();
+        $this.parent('li').hide('drop', 1000, function() {
+          $this.remove();
+        });
         obj.removeEmployeeFromToDosSection(removedEmployeeId, parentRolesBlockId);
       }
     })
@@ -167,7 +169,9 @@ RoleManagement.prototype = {
     $('.empToDosContainer').each(function() {
       var $this = $(this);
       if ($this.attr('data-id') == (removedEmployeeId + 'ToDos_' + parentRolesBlockId)) {
-        $this.remove();
+        $this.hide('drop', 1000, function() {
+          $this.remove();
+        });
       }
     })
   },
