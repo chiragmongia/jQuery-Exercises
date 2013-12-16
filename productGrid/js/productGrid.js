@@ -20,7 +20,7 @@ ProductGrid.prototype = {
     $.ajax({
       url:      'data/productsData.js',
       type:     'GET',
-      dataType: 'text',
+      dataType: 'json',
       success: function(json) {
         createStoreFrontPage(json);
       },
@@ -30,7 +30,6 @@ ProductGrid.prototype = {
     });
 
     function createStoreFrontPage(json) {
-      var json = JSON.parse(json);
       for (var i = 0; i < json.length; i++) {
         var $productGrid = $('<div class="productGrid"></div>');
         $productGrid.attr( { 'data-color': json[i].color, 'data-brand': json[i].brand, 'data-sold-out': json[i].sold_out });
@@ -56,14 +55,10 @@ ProductGrid.prototype = {
   },
 
   generateFilterStringForMaxSelectedOptionsFilter: function($maxSelectedOptionsFilter) {
+    var obj = this;
     var selectedImgContainerArray = [];
     $maxSelectedOptionsFilter.find('input:checked').each(function() {
-      var selectedImgContainer = "",
-          filterName;
-
-      filterName = $(this).attr('data-filter-name');
-      selectedImgContainer = ".productGrid[data-" + filterName + "='" + $(this).attr("data-"+ filterName) + "']";
-      selectedImgContainerArray.push(selectedImgContainer);
+      obj.generateFilterStringArray(this, '.productGrid', selectedImgContainerArray);
     });
     return selectedImgContainerArray; 
   },
@@ -78,7 +73,25 @@ ProductGrid.prototype = {
     }
   },
 
+  generateFilterStringArray: function(checkedCheckBox, filterString, containerArray) {
+    var filterName = $(checkedCheckBox).attr('data-filter-name');
+    var selectedImgContainerArr = filterString + "[data-" + filterName + "='" + $(checkedCheckBox).attr("data-"+ filterName) + "']";
+    containerArray.push(selectedImgContainerArr);
+    return containerArray;
+  },
+
+  showAllProductsIfNoCheckedCheckbox: function() {
+    var checkedCheckBoxCount = $('.checkbox:checked').length;
+    if (checkedCheckBoxCount == 0) {
+      $('.productGrid').show();
+      return;
+    }
+  },
+
   filterData: function() {
+    this.showAllProductsIfNoCheckedCheckbox();
+
+    var that = this;
     var $maxSelectedOptionsFilter = $(this.findMaxSelectedOptionsFilter()),
         selectedImgContainerArray = [];
 
@@ -88,9 +101,7 @@ ProductGrid.prototype = {
       $(this).find('input:checked').each(function() {
         var obj = this;
         $(selectedImgContainerArray).each(function() {
-          var filterName = $(obj).attr('data-filter-name');
-          var finalSelector = this + "[data-" + filterName + "='" + $(obj).attr("data-"+ filterName) + "']";
-          finalSelectorArray.push(finalSelector);
+          that.generateFilterStringArray(obj, this, finalSelectorArray);
         })
       })
 
