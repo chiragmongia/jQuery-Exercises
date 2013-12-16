@@ -1,0 +1,135 @@
+#container {
+  margin: 30px 10px 20px 30px;
+  overflow: hidden;
+}
+
+.employeesContainer {
+  display: inline;
+  position: absolute;
+  left: 280px;
+  border: solid 2px;
+  width: 100px;
+}
+
+.employeesSectionHeading {
+  margin: 0px;
+  border: solid 2px;
+  text-align: center;
+}
+
+.employeesBlock {
+  margin: 0px;
+  padding: 0px;
+  list-style-type: none;
+}
+
+.employeeListItem {
+  border: solid 1px;
+  text-align: left;
+}
+
+.toDosContainer {
+  float: right;
+  width: 650px;
+  border: solid 2px;
+  text-align: center;
+}
+
+.toDosSectionHeading {
+  margin: 0px;
+  border: solid 2px;
+}
+
+.toDosHeading {
+  margin: 0px;
+  border: solid 2px;
+  cursor: pointer;
+}
+
+.toDosBlock {
+  margin: 0px;
+  padding: 0px;
+  list-style-type: none;
+}
+
+.rolesContainer {
+  border: solid 2px;
+  float: left;
+  text-align: center;
+  margin: 0px 0px 0px 20px;
+}
+
+.rolesBlock {
+  margin: 0px;
+  padding: 0px;
+  list-style-type: none;
+}
+
+.rolesSectionHeading {
+  margin: 0px;
+  border-bottom: solid 2px;
+}
+
+.rolesHeading {
+  margin: 0px;
+  border: solid 2px;
+  border-right: none;
+  border-left: none;
+}
+
+.addedEmployeesBlock {
+  height: 130px;
+  overflow: auto;
+  padding: 0px;
+}
+
+.employeesToDosBlock {
+  height: 200px;
+  overflow: auto;
+  padding: 0px;
+
+}
+
+.addedEmpName {
+  border: solid 2px;
+  display: inline;
+  float: left;
+  margin: 20px;
+  padding: 6px;
+}
+
+.addedEmpNameBlock {
+  border: solid 2px;
+  width: 500px;
+  height: 56px;
+  margin: 20px 0px 10px 119px;
+}
+
+.cross_button {
+  position: absolute;
+  left: 169px;
+  margin-top: 2px;
+  height: 14px;
+  width: 14px;
+  display: none;
+  cursor: pointer;
+}
+
+.highlight {
+  background: yellow;
+}
+
+.addedEmployeesBlock li {
+  padding: 0px 0px 0px 30px;
+  margin-left: -30px;
+}
+
+.headingImages {
+  height: 20px;
+  width: 20px;
+  float: right;
+}
+
+.toDosHeading:hover {
+  background: yellow;
+}
