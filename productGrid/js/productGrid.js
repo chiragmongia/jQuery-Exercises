@@ -84,12 +84,16 @@ ProductGrid.prototype = {
     var checkedCheckBoxCount = $('.checkbox:checked').length;
     if (checkedCheckBoxCount == 0) {
       $('.productGrid').show();
-      return;
+      return true;
     }
+    return false;
   },
 
   filterData: function() {
-    this.showAllProductsIfNoCheckedCheckbox();
+
+    if (this.showAllProductsIfNoCheckedCheckbox()) {
+      return;
+    }
 
     var that = this;
     var $maxSelectedOptionsFilter = $(this.findMaxSelectedOptionsFilter()),
