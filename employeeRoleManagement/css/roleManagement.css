@@ -5,7 +5,7 @@
 
 .employeesContainer {
   display: inline;
-  position: absolute;
+  position: fixed;
   left: 280px;
   border: solid 2px;
   width: 100px;
