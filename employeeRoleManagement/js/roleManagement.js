@@ -14,8 +14,8 @@ RoleManagement.prototype = {
 
   createSections: function() {
     this.createEmployeesSection();
-    this.createRolesSection();
     this.createToDosSection();
+    this.createRolesSection();
   },
 
   bindEvents: function() {
@@ -28,33 +28,45 @@ RoleManagement.prototype = {
         $employeesBlock = $('<ul />', {'class': 'employeesBlock'}),
         $employeesSectionHeading = $('<h3 />', {'class': 'employeesSectionHeading','text': 'Employees' });
     
-    for(var i = 0; i < this.employees.length; i++) {
-      var $employeeListIem = $('<li />', {'id': this.employees[i], 'class': 'employeeListItem', 'text': this.employees[i] });
-      $employeeListIem.appendTo($employeesBlock);
-    }
     $employeesSectionHeading.appendTo($employeesContainer);
     $employeesBlock.appendTo($employeesContainer);
     $employeesContainer.appendTo(this.container);
+
+    for(var i = 0; i < this.employees.length; i++) {
+      this.createElementsForEmployeesSection($employeesBlock, this.employees[i]);
+    }
+  },
+
+  createElementsForEmployeesSection: function($employeesBlock, employeeItem) {
+    var $employeeListIem = $('<li />', {'id': employeeItem, 'class': 'employeeListItem', 'text': employeeItem });
+    $employeeListIem.appendTo($employeesBlock);
   },
 
   createRolesSection: function() {
     var $rolesContainer = $('<div />', {'class': 'rolesContainer'}),
         $rolesBlock     = $('<ul />', {'class': 'rolesBlock'}),
         $rolesSectionHeading   = $('<h3 />', {'class': 'rolesSectionHeading', 'text': 'Roles'});
+        $toDosBlock = $('.toDosBlock');
 
-    for(var i = 0; i < this.roles.length; i++) {
-      var $rolesListIem = $('<li />', {'class': 'rolesListIem'}),
-          $rolesHeading = $('<h3 />', {'class': 'rolesHeading', 'text': this.roles[i] }),
-          rolesName  = this.getRolesIdByName(this.roles[i]),
-          $addedEmployeesBlock = $('<ul />', { 'id': rolesName + 'block', 'class': 'addedEmployeesBlock'}); 
-      
-      $rolesHeading.appendTo($rolesListIem);
-      $addedEmployeesBlock.appendTo($rolesListIem);
-      $rolesListIem.appendTo($rolesBlock);
-    }
     $rolesSectionHeading.appendTo($rolesContainer);
     $rolesBlock.appendTo($rolesContainer);
     $rolesContainer.appendTo(this.container);
+
+    for(var i = 0; i < this.roles.length; i++) {
+      this.createElementsForRolesSection($rolesBlock, this.roles[i]);
+      this.createElementsForToDoSection($toDosBlock, this.roles[i]);
+    }
+  },
+
+  createElementsForRolesSection: function($rolesBlock, roleItem) {
+    var $rolesListIem = $('<li />', {'class': 'rolesListIem'}),
+    $rolesHeading = $('<h3 />', {'class': 'rolesHeading', 'text': roleItem }),
+    rolesName  = this.getRolesIdByName(roleItem),
+    $addedEmployeesBlock = $('<ul />', { 'id': rolesName + 'block', 'class': 'addedEmployeesBlock'});
+
+    $rolesHeading.appendTo($rolesListIem);
+    $addedEmployeesBlock.appendTo($rolesListIem);
+    $rolesListIem.appendTo($rolesBlock);
   },
 
   createToDosSection: function() {
@@ -62,23 +74,24 @@ RoleManagement.prototype = {
         $toDosBlock     = $('<ul />', {'class': 'toDosBlock'}),
         $toDosSectionHeading = $('<h3 />', {'class': 'toDosSectionHeading', 'text': 'To Dos'});
 
-    for (var i = 0; i < this.roles.length; i++) {
-      var $toDosListItem = $('<li />', {'class': 'toDosListItem'}),
-          $toDosHeading = $('<h3 />', {'class': 'toDosHeading', 'text': this.roles[i]}),
-          $toDosHeadingMinusImg = $('<img />', { 'id': 'minusSignImg', 'src': 'images/minus-sign.png', 'class': 'headingImages'}),
-          $toDosHeadingPlusImg = $('<img />', { 'id': 'plusSignImg', 'src': 'images/plus-sign.png', 'class': 'headingImages'}),
-          dataRolesId = this.getRolesIdByName(this.roles[i]),
-          $employeesToDosBlock = $('<div />', {'class': 'employeesToDosBlock', 'data-roles-id': dataRolesId + 'block'}); 
-      
-      $toDosHeadingMinusImg.appendTo($toDosHeading);
-      $toDosHeadingPlusImg.appendTo($toDosHeading).hide();
-      $toDosHeading.appendTo($toDosListItem);
-      $employeesToDosBlock.appendTo($toDosListItem);
-      $toDosListItem.appendTo($toDosBlock);
-    }
     $toDosSectionHeading.appendTo($toDosContainer);
     $toDosBlock.appendTo($toDosContainer);
     $toDosContainer.appendTo(this.container);
+  },
+
+  createElementsForToDoSection: function($toDosBlock, roleItem) {
+    var $toDosListItem = $('<li />', {'class': 'toDosListItem'}),
+        $toDosHeading = $('<h3 />', {'class': 'toDosHeading', 'text': roleItem}),
+        $toDosHeadingMinusImg = $('<img />', { 'id': 'minusSignImg', 'src': 'images/minus-sign.png', 'class': 'headingImages'}),
+        $toDosHeadingPlusImg = $('<img />', { 'id': 'plusSignImg', 'src': 'images/plus-sign.png', 'class': 'headingImages'}),
+        dataRolesId = this.getRolesIdByName(roleItem),
+        $employeesToDosBlock = $('<div />', {'class': 'employeesToDosBlock', 'data-roles-id': dataRolesId + 'block'}); 
+
+    $toDosHeadingMinusImg.appendTo($toDosHeading);
+    $toDosHeadingPlusImg.appendTo($toDosHeading).hide();
+    $toDosHeading.appendTo($toDosListItem);
+    $employeesToDosBlock.appendTo($toDosListItem);
+    $toDosListItem.appendTo($toDosBlock);
   },
 
   getRolesIdByName: function(rolesName) {
