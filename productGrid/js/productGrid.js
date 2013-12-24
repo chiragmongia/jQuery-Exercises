@@ -39,82 +39,41 @@ ProductGrid.prototype = {
     }
   },
 
-  findMaxSelectedOptionsFilter: function() {
-    var maxSelectedOptionsFilter = this.filters[0],
-        initialCheckCount = 0;
-
-    this.filters.each(function() {
-      var checkedOptionsCount = $(this).find('input:checked').length;
-      if (checkedOptionsCount > initialCheckCount) {
-        maxSelectedOptionsFilter = this;
-        initialCheckCount = checkedOptionsCount;
-      }
-    });
-
-    return maxSelectedOptionsFilter;
-  },
-
-  generateFilterStringForMaxSelectedOptionsFilter: function($maxSelectedOptionsFilter) {
-    var obj = this;
-    var selectedImgContainerArray = [];
-    $maxSelectedOptionsFilter.find('input:checked').each(function() {
-      obj.generateFilterStringArray(this, '.productGrid', selectedImgContainerArray);
-    });
-    return selectedImgContainerArray; 
-  },
-
-  displayFilteredProducts: function(selectedImgContainerArray) {
-    var finalSelectorString = selectedImgContainerArray.join(',');
-    if (selectedImgContainerArray.length) {
-      $('.productGrid').hide().filter(finalSelectorString).show();
-    }
-    else {
-      $('.productGrid').show();
-    }
-  },
-
-  generateFilterStringArray: function(checkedCheckBox, filterString, containerArray) {
-    var filterName = $(checkedCheckBox).attr('data-filter-name');
-    var selectedImgContainerArr = filterString + "[data-" + filterName + "='" + $(checkedCheckBox).attr("data-"+ filterName) + "']";
-    containerArray.push(selectedImgContainerArr);
-    return containerArray;
-  },
-
-  showAllProductsIfNoCheckedCheckbox: function() {
-    var checkedCheckBoxCount = $('.checkbox:checked').length;
-    if (checkedCheckBoxCount == 0) {
-      $('.productGrid').show();
-      return true;
-    }
-    return false;
-  },
-
   filterData: function() {
+    var obj = this;
+    var $allProducts = $('.productGrid');
+    $('.filter').each(function(index, value) {
+      $allProducts = obj.filterGroup($allProducts, value);
+    });
+    this.showFilteredProducts($allProducts);
+  },
 
-    if (this.showAllProductsIfNoCheckedCheckbox()) {
-      return;
+  filterGroup: function($filteredProducts, filterContainer) {
+    var checkedCheckBox = $(filterContainer).find('input:checked');
+
+    if ( checkedCheckBox.length == 0 ) {
+      return $filteredProducts;
     }
 
-    var that = this;
-    var $maxSelectedOptionsFilter = $(this.findMaxSelectedOptionsFilter()),
-        selectedImgContainerArray = [];
-
-    selectedImgContainerArray = this.generateFilterStringForMaxSelectedOptionsFilter($maxSelectedOptionsFilter);
-    $maxSelectedOptionsFilter.siblings('.filter').each(function() {
-      var finalSelectorArray = [];
-      $(this).find('input:checked').each(function() {
+    else {
+      var filteredProductsArr = [];
+      $(filterContainer).find('input:checked').each(function() {
         var obj = this;
-        $(selectedImgContainerArray).each(function() {
-          that.generateFilterStringArray(obj, this, finalSelectorArray);
+        var filterName = $(this).attr('data-filter-name');
+        var selectedValue = $(this).attr('data-' + filterName);
+        $filteredProducts.each(function() {
+          if ($(this).attr('data-' + filterName) == selectedValue) {
+            filteredProductsArr.push(this);
+          }
         })
       })
+      return $(filteredProductsArr);
+    }
+  },
 
-      if (finalSelectorArray.length) {
-        selectedImgContainerArray = finalSelectorArray;
-      }
-    })
-
-    this.displayFilteredProducts(selectedImgContainerArray);
+  showFilteredProducts: function(filteredProducts) {
+    $('.productGrid').hide();
+    $(filteredProducts).show();
   }
 }
 
