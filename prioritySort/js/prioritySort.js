@@ -11,16 +11,24 @@ SortingListItems.prototype = {
   },
 
   bindEvents: function() {
+    this.seeAllListener();
+    this.seeLessListener();
+  },
+
+  seeAllListener: function() {
     var obj = this;
     $('.expandLi').show().end().delegate('.expandLinks', 'click', function() {
       obj.expandContainer(this);
       obj.sortByName(this);
     });
+  },
 
+  seeLessListener: function() {
+    var obj = this;
     $('.contractLi').hide().end().delegate('.contractLinks', 'click', function() {
       obj.contractContainer(this);
       obj.sortByPriority(this);
-    })
+    });
   },
 
   sortByPriority: function(seeLessLink) {
@@ -30,7 +38,7 @@ SortingListItems.prototype = {
     $listItems.sort(function(a, b) {
       return obj.sortByPriorityOrder(a, b);
     })
-    this.displayResult($listContainer, $listItems);
+    this.displayListAfterSort($listContainer, $listItems);
   },
 
   sortByName: function(seeAllLink) {
@@ -40,12 +48,12 @@ SortingListItems.prototype = {
     $listItems.sort(function(a, b) {
       return obj.sortByLiValues(a, b);
     })
-    this.displayResult($listContainer, $listItems);
+    this.displayListAfterSort($listContainer, $listItems);
   },
 
   contractContainer: function(seeLessLink) {
     var $listContainer = $(seeLessLink).closest('ul');
-    this.showTillMaxVisibleLi($listContainer, parseInt($listContainer.attr('data-initial-list-count')))
+    this.displayTillInitialListCount($listContainer, this.getInitialListCount($listContainer));
     $(seeLessLink).hide();
     this.appendSeeAllLink($listContainer);
   },
@@ -97,11 +105,21 @@ SortingListItems.prototype = {
     $seeAllLi.appendTo($listContainer);
   },
 
-  displayResult: function($listContainer, $sortedListItems) {
+  displayListAfterSort: function($listContainer, $sortedListItems) {
     var $links = $listContainer.find('.linksContainer');
     $listContainer.empty();
     $listContainer.append($sortedListItems);
     $listContainer.append($links);
+  },
+
+  displayTillInitialListCount: function(listContainer, maxValue) {
+    $(listContainer).each(function() {
+      $(this).find('li:gt(' + (maxValue-1)  + ')').hide();
+    })
+  },
+
+  getInitialListCount: function($listContainer) {
+    return parseInt($listContainer.attr('data-initial-list-count'));
   },
 
   displaySortedList: function($listContainer, $sortedListItems) {
@@ -109,12 +127,6 @@ SortingListItems.prototype = {
     $listContainer.empty();
     $listContainer.append($sortedListItems);
     $listContainer.append($listWithoutPriorityOrder);
-  },
-
-  showTillMaxVisibleLi: function(listContainer, maxValue) {
-    $(listContainer).each(function(){ 
-      $(this).find('li:gt(' + (maxValue-1)  + ')').hide();
-    })
   },
 
   displayContainerWithPrioritySort: function() {
@@ -126,7 +138,7 @@ SortingListItems.prototype = {
         return obj.sortByPriorityOrder(a,b);
       })
       obj.displaySortedList($this, $listWithPriorityOrder);
-      obj.showTillMaxVisibleLi(this, parseInt($this.attr('data-initial-list-count')));
+      obj.displayTillInitialListCount(this, obj.getInitialListCount($this));
     })
   },
 }
