@@ -1,7 +1,6 @@
 ul {
   list-style-type: none;
-  float: left;
-  margin: 10px 50px;
+  margin: 10px 50px 30px;
   padding: 0px;
   width: 100px;
 }
@@ -9,4 +8,14 @@ ul {
 .expandLinks, .contractLinks {
   color: blue;
   cursor: pointer;
+}
+
+.highlightBtn {
+  background: black;
+  color: white;
+  font-size: 13px;
+  font-weight: bold;
+  padding: 4px;
+  border: solid 1px;
+  border-radius: 5px;
 }
