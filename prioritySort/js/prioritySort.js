@@ -26,19 +26,25 @@ SortingListItems.prototype = {
   seeLessListener: function() {
     var obj = this;
     $('.contractLi').hide().end().delegate('.contractLinks', 'click', function() {
-      obj.contractContainer(this);
       obj.sortByPriority(this);
+      obj.contractContainer(this);
     });
   },
 
   sortByPriority: function(seeLessLink) {
     var obj = this;
     var $listContainer = $(seeLessLink).closest('ul');
-    var $listItems = $listContainer.find('li:not(.linksContainer)');
+    var $listWithoutPriorityOrder = $listContainer.find('li:not(li[data-priority-order])');
+    var $listItems = $listContainer.find('li[data-priority-order]');
     $listItems.sort(function(a, b) {
       return obj.sortByPriorityOrder(a, b);
     })
     this.displayListAfterSort($listContainer, $listItems);
+    this.appendWithoutPriorityOrderList($listContainer, $listWithoutPriorityOrder);
+  },
+
+  appendWithoutPriorityOrderList: function($listContainer, $listWithoutPriorityOrder) {
+    $listContainer.append($listWithoutPriorityOrder);
   },
 
   sortByName: function(seeAllLink) {
