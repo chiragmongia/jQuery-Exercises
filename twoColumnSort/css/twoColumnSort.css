@@ -1,0 +1,30 @@
+ul {
+  list-style-type: none;
+  margin: 0px;
+  padding: 0px;
+}
+
+.links {
+  color: blue;
+  cursor: pointer; 
+}
+
+.leftUl {
+  float: left;
+  margin: 0px 50px;
+  width: 125px
+}
+
+.listContainer {
+  float: left;
+  width: 100%;
+  margin: 10px 0px 30px;
+}
+
+#container {
+  margin-left: 100px;
+}
+
+.non-sortable {
+  margin: 0px 0px 0px 50px;
+}
