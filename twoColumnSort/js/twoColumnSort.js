@@ -5,58 +5,55 @@ var TwoColumnSorting = function(sourceListBlock) {
 
 TwoColumnSorting.prototype = {
   init: function() {
-    this.listContainer = $('.listContainer');
     this.sortableItemsList = this.sourceListBlock.children('li');
-    this.setUpPage();
-    this.bindEvents();
-  },
-
-  setUpPage: function() {
     this.createUnorderedList(this.sourceListBlock);
-    var $sortedListItems = this.sortList(this.sortableItemsList);
-    var initialListCount = this.getInitialListCount(this.sourceListBlock);
-    var $displayedItems = this.getItemsToBeDisplayed($sortedListItems, initialListCount);
-    var $leftSideList = this.getLeftSideList($displayedItems, initialListCount);
-    var $rightSideList = this.getRightSideList($displayedItems, initialListCount);
-    this.displayList($leftSideList, $rightSideList);
-    this.appendSeeMoreLink($rightSideList.parent('ul'));
+    var $rightSideListBlock = this.sourceListBlock.siblings('.dynamicUlContainer').find('.rightUl');
+    this.displayDefaultView(this, $rightSideListBlock);
+    this.bindEvents($rightSideListBlock);
   },
 
-  bindEvents: function() {
-    var $rightSideList = this.sourceListBlock.siblings('.dynamicUlContainer').find('.rightUl');
-    this.seeMoreListener($rightSideList);
-    this.seeLessListener($rightSideList);
+  bindEvents: function($rightSideListBlock) {
+    this.seeMoreListener($rightSideListBlock);
+    this.seeLessListener($rightSideListBlock);
   },
 
-  seeMoreListener: function($rightSideList) {
+  seeMoreListener: function($rightSideListBlock) {
     var obj = this;
-    $rightSideList.delegate('#seeMoreLink', 'click', function() {
-      var $sortedListItems = obj.sortList(obj.sortableItemsList);
-      var listCountOnEachSide = Math.round(($sortedListItems.length)/2);
-      var $displayedItems = obj.getItemsToBeDisplayed($sortedListItems, listCountOnEachSide);
-      var $leftSideList = obj.getLeftSideList($displayedItems, listCountOnEachSide);
-      var $rightSideList = obj.getRightSideList($displayedItems, listCountOnEachSide);
-      obj.displayList($leftSideList, $rightSideList);
-      obj.appendSeeLessLink($rightSideList.parent('ul'));
+    $rightSideListBlock.delegate('#seeMoreLink', 'click', function() {
+      var listCountOnEachSide = Math.round((obj.sortableItemsList.length)/2);
+      obj.displayList(obj, listCountOnEachSide);
+      obj.appendSeeLessLink($rightSideListBlock);
     })
   },
 
-  seeLessListener: function($rightSideList) {
+  seeLessListener: function($rightSideListBlock) {
     var obj = this;
-    $rightSideList.delegate('#seeLessLink', 'click', function() {
-      var $sortedListItems = obj.sortList(obj.sortableItemsList);
-      var initialListCount = obj.getInitialListCount(obj.sourceListBlock);
-      var $displayedItems = obj.getItemsToBeDisplayed($sortedListItems, initialListCount);
-      var $leftSideList = obj.getLeftSideList($displayedItems, initialListCount);
-      var $rightSideList = obj.getRightSideList($displayedItems, initialListCount);
-      obj.displayList($leftSideList, $rightSideList);
-      obj.appendSeeMoreLink($rightSideList.parent('ul'));
+    $rightSideListBlock.delegate('#seeLessLink', 'click', function() {
+      obj.displayDefaultView(obj, $rightSideListBlock);
     })
   },
 
-  displayList: function($leftSideList, $rightSideList) {
-    this.sourceListBlock.siblings('.dynamicUlContainer').find('.leftUl').empty().append($leftSideList);
-    this.sourceListBlock.siblings('.dynamicUlContainer').find('.rightUl').empty().append($rightSideList);
+  displayList: function(obj, listCountOnEachSide) {
+    var $sortedListItems = obj.sortList(obj.sortableItemsList);
+    var $displayedItems = obj.getItemsToBeDisplayed($sortedListItems, listCountOnEachSide);
+    var $leftSideList = obj.getLeftSideList($displayedItems, listCountOnEachSide);
+    var $rightSideList = obj.getRightSideList($displayedItems, listCountOnEachSide);
+    obj.appendListsToRespectiveBlocks($leftSideList, $rightSideList);
+  },
+
+  displayDefaultView: function(obj, $rightSideListBlock) {
+    var initialListCount = obj.getInitialListCount(obj.sourceListBlock);
+    obj.displayList(obj, initialListCount);
+    obj.appendSeeMoreLink($rightSideListBlock);
+  },
+
+  appendListsToRespectiveBlocks: function($leftSideList, $rightSideList) {
+    this.appendListItemsToListBlock($leftSideList, ('.leftUl'));
+    this.appendListItemsToListBlock($rightSideList, ('.rightUl'));
+  },
+
+  appendListItemsToListBlock: function($list, listBlock) {
+    this.sourceListBlock.siblings('.dynamicUlContainer').find(listBlock).empty().append($list);
   },
 
   getItemsToBeDisplayed: function($sortedListItems, maxValue) {
@@ -109,18 +106,18 @@ TwoColumnSorting.prototype = {
     $seeLessLi.appendTo($listContainer);
   },
 
-  strCompare: function(a, b) {
+  compareValues: function(a, b) {
     return (a > b) ? 1 : (a < b) ? -1 : 0;
   },
 
-  getNumberfromString: function(numberString) {
-    return parseInt(numberString);
+  getPriorityOrder: function(element) {
+    return $(element).attr('data-priority-order');
   },
 
   sortByPriorityOrder: function(a, b) {
-    a = this.getNumberfromString($(a).attr('data-priority-order'));
-    b = this.getNumberfromString($(b).attr('data-priority-order'));
-    return this.strCompare(a, b);
+    a = this.getPriorityOrder(a);
+    b = this.getPriorityOrder(b);
+    return this.compareValues(a, b);
   },
 
   sortList: function(sortableItemsList) {
