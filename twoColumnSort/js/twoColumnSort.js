@@ -111,7 +111,7 @@ TwoColumnSorting.prototype = {
   },
 
   getPriorityOrder: function(element) {
-    return $(element).attr('data-priority-order');
+    return parseInt($(element).attr('data-priority-order'));
   },
 
   sortByPriorityOrder: function(a, b) {
