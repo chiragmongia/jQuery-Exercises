@@ -84,7 +84,7 @@ TwoColumnSorting.prototype = {
 
   createSeeMoreLink: function() {
     var $seeMoreLink = $('<a />', {'id': 'seeMoreLink', 'text': 'See More'});
-    var $seeMoreLi = $('<li />', {'id': 'seeMoreLi', 'class': 'links'});
+    var $seeMoreLi   = $('<li />', {'id': 'seeMoreLi', 'class': 'links'});
     $seeMoreLink.appendTo($seeMoreLi);
     return $seeMoreLi;
   },
