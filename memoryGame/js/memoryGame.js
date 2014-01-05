@@ -1,3 +1,7 @@
+Array.prototype.rand = function() {
+  return this[Math.floor((Math.random()*(this.length-1))+1)];
+}
+
 var MemoryGame = function() {
   this.init();
 }
@@ -49,26 +53,12 @@ MemoryGame.prototype = {
     $timerDiv.appendTo(this.container);
   },
 
-  randomizeArray: function(arr, shuffledArray) {
-    if (arr.length == 1) {
-      shuffledArray.push(arr[arr.length-1]);
-    }
-    else {
-      var randomIndex = Math.floor((Math.random()*(arr.length-1))+1);
-      shuffledArray.push(arr[randomIndex]);
-      arr.splice(randomIndex, 1);
-      return arr;
-    }
-  },
-
   generateRandomImages: function() {
-    var obj = this;
     var imageArray = this.createImageArray();
-    var shuffledArray = [];
-    $(imageArray).each(function() {
-      imageArray = obj.randomizeArray(imageArray, shuffledArray);
-    });
-    return shuffledArray;
+    imageArray.sort(function() {
+      return [0, 1, -1].rand();
+    })
+    return imageArray;
   },
 
   appendImagesToColumns: function() {
@@ -134,7 +124,7 @@ MemoryGame.prototype = {
   resultPage: function() {
     var $paraElement = $('<p>', { 'class': 'resultText' });
     var resultString = this.generateResultString();
-    $paraElement.text(textString);
+    $paraElement.text(resultString);
     this.container.empty();
     $paraElement.appendTo(this.container);
   },
