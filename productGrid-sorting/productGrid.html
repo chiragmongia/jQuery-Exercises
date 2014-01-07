@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="css/productGrid.css">
+  </head>
+  <body>
+    <div id="container">
+      <div id="product-filters">
+        <div id="brandFilter" class="filter">
+          <p class="filter-heading"><strong>Brands</strong></p>
+          <input type="checkbox" id="brand-a" class="brand-check checkbox" value="BRAND A" data-filter-name="brand">
+          <label for="brand-a">Brand A</label><br/>
+
+          <input type="checkbox" id="brand-b" class="brand-check checkbox" value="BRAND B" data-filter-name="brand">
+          <label for="brand-b">Brand B</label><br/>
+
+          <input type="checkbox" id="brand-c" class="brand-check checkbox" value="BRAND C" data-filter-name="brand">
+          <label for="brand-c">Brand C</label><br/>
+
+          <input type="checkbox" id="brand-d" class="brand-check checkbox" value="BRAND D" data-filter-name="brand">
+          <label for="brand-d">Brand D</label><br/>
+        </div>
+
+        <div id="colorFilter" class="filter">
+          <p class="filter-heading"><strong>Colors</strong></p>
+          <input type="checkbox" id="yellow" class="color-check checkbox" value="Yellow" data-filter-name="color">
+          <label for="yellow">Yellow</label><br/>
+
+          <input type="checkbox" id="red" class="color-check checkbox" value="Red" data-filter-name="color">
+          <label for="red">Red</label><br/>
+
+          <input type="checkbox" id="blue" class="color-check checkbox" value="Blue" data-filter-name="color">
+          <label for="blue">Blue</label><br/>
+
+          <input type="checkbox" id="green" class="color-check checkbox" value="Green" data-filter-name="color">
+          <label for="green">Green</label><br/>        
+        </div>
+
+        <div id="availabilityFilter" class="filter">
+          <p class="filter-heading"><strong>Availability</strong></p>
+            <input type="checkbox" id="available" class="availability-check checkbox" value="0" data-filter-name="sold-out">
+            <label for="available">Available</label><br/>
+
+            <input type="checkbox" id="soldOut" class="availability-check checkbox" value="1" data-filter-name="sold-out">
+            <label for="soldOut">Sold Out</label><br/>
+        </div>
+      </div>
+      <div id="paginateFilter">
+        <p class="filter-heading"><strong>Pagination</strong></p>
+        <select class="paginateOption">
+          <option value="3">3</option>
+          <option value="6">6</option>
+          <option value="9">9</option>
+        </select>
+      </div>
+
+      <div id="sortFilter">
+        <p class="filter-heading"><strong>Sorting</strong></p>
+        <select class="sortOption">
+          <option value="data-brand">Sort By Brand</option>
+          <option value="data-color">Sort By Color</option>
+          <option value="data-sold-out">Sort By Availability</option>
+        </select>
+      </div>
+
+      <div id="productsContainer">
+      </div>
+    </div>
+
+    <script src="libs/jQuery_v2.0.3.js"></script>
+    <script src="js/productGrid.js" type="text/javascript"></script>
+  </body>
+</html>
