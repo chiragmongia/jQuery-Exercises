@@ -61,7 +61,7 @@ ProductGrid.prototype = {
     function createStoreFrontPage(json) {
       for (var i = 0; i < json.length; i++) {
         var $productGrid = $('<div class="productGrid"></div>');
-        $productGrid.attr( { 'data-color': json[i].color, 'data-brand': json[i].brand, 'data-sold-out': json[i].sold_out });
+        $productGrid.attr( { 'data-name': json[i].name ,'data-color': json[i].color, 'data-brand': json[i].brand, 'data-sold-out': json[i].sold_out });
         $('<img></img>').attr('src',json[i].url).appendTo($productGrid);
         $productGrid.appendTo($('#productsContainer'));
       }
@@ -155,7 +155,7 @@ ProductGrid.prototype = {
 
   sorterFunction: function(selectedSortOption) {
     var obj = this;
-    if (selectedSortOption == "data-sold-out") {
+    if (selectedSortOption == 'data-sold-out' || selectedSortOption == 'data-name') {
       return function(a,b) {
         a = parseInt($(a).attr(selectedSortOption));
         b = parseInt($(b).attr(selectedSortOption));
