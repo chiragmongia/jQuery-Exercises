@@ -6,6 +6,7 @@ ProductGrid.prototype = {
   init: function() {
     this.filters = $('.filter');
     this.container = $('#container');
+    this.paginateOption = $('.paginateOption');
     this.fetchJsonData();
     this.bindEvents();
   },
@@ -19,14 +20,14 @@ ProductGrid.prototype = {
   filtersListener: function() {
     var obj = this;
     $('.checkbox, .paginateOption').bind('change', function() {
-      obj.filterData(obj.allProducts);
+      obj.filterData();
     });
   },
 
   paginationListener: function() {
     var obj = this;
     this.container.delegate('.page-numbers', 'click', function() {
-      $(this).addClass('highlight').siblings().removeClass('highlight');
+      $(this).addClass('highlight').siblings('.page-numbers').removeClass('highlight');
       obj.pageNumberListener(this.textContent);
     });
   },
@@ -52,8 +53,8 @@ ProductGrid.prototype = {
       },
       complete: function() {
         obj.allProducts = $('.productGrid');
-        obj.sortProducts($('.productGrid'));
-        obj.createPageFooter($('.productGrid'));
+        obj.sortProducts(obj.allProducts);
+        obj.createPageFooter(obj.allProducts);
       }
     });
 
@@ -67,10 +68,10 @@ ProductGrid.prototype = {
     }
   },
 
-  filterData: function($allProducts) {
+  filterData: function() {
     var obj = this;
-    var $sortedProducts = this.sortProducts($allProducts);
-    $('.filter').each(function(index, value) {
+    var $sortedProducts = this.sortProducts(this.allProducts);
+    this.filters.each(function(index, value) {
       $sortedProducts = obj.filterGroup($sortedProducts, value);
     });
     var selectedSortOption = $('.sortOption').val();
@@ -98,15 +99,11 @@ ProductGrid.prototype = {
   },
 
   getTotalPages: function(filteredProducts, paginateValue) {
-    var totalPages = Math.floor((filteredProducts.length)/paginateValue);
-    if ((filteredProducts.length) % paginateValue == 0)
-      return totalPages;
-    else
-      return totalPages + 1;
+    return Math.ceil((filteredProducts.length)/paginateValue);
   },
 
   createPageFooter: function(filteredProducts) {
-    var paginateValue = $('.paginateOption').val();
+    var paginateValue = this.paginateOption.val();
     var totalPages = this.getTotalPages(filteredProducts, paginateValue);
     this.createPageFooterElements(totalPages);
     this.showFilteredProducts(filteredProducts, paginateValue);
@@ -135,11 +132,11 @@ ProductGrid.prototype = {
   },
 
   pageNumberListener: function(selectedPageNumber) {
-    var paginateValue = $('.paginateOption').val();
+    var paginateValue = this.paginateOption.val();
     var initialValue = this.getInitialValueOfDisplayedProducts(selectedPageNumber, paginateValue);
     var finalValue   = this.getFinalValueOfDisplayedProducts(selectedPageNumber, paginateValue);
-    var filteredProducts = this.filteredProducts || $('.productGrid');
-    $('.productGrid').hide();
+    var filteredProducts = this.filteredProducts || this.allProducts;
+    this.allProducts.hide();
     filteredProducts.slice(initialValue, finalValue).show();
   },
 
@@ -149,9 +146,10 @@ ProductGrid.prototype = {
 
   sortProducts: function($allProducts) {
     var selectedSortOption = $('.sortOption').val();
+    var $productsContainer = $('#productsContainer');
     $allProducts.sort(this.sorterFunction(selectedSortOption));
-    $('#productsContainer').empty();
-    $('#productsContainer').append($allProducts);
+    $productsContainer.empty();
+    $productsContainer.append($allProducts);
     return $allProducts;
   },
 
@@ -175,14 +173,14 @@ ProductGrid.prototype = {
   },
 
   sortOptionListener: function(selectedSortOption) {
-    var filteredProducts = this.filteredProducts || $('.productGrid');
-    var paginateValue = $('.paginateOption').val();
+    var filteredProducts = this.filteredProducts || this.allProducts;
+    var paginateValue = this.paginateOption.val();
     var sortedProducts = this.sortProducts(filteredProducts);
     this.showFilteredProducts(sortedProducts, paginateValue);
   },
 
   showFilteredProducts: function(filteredProducts, paginateValue) {
-    $('.productGrid').hide();
+    this.allProducts.hide();
     $('.page-numbers:first').addClass('highlight').siblings('.page-numbers').removeClass('highlight');
     $(filteredProducts).slice(0, paginateValue).show();
   }
