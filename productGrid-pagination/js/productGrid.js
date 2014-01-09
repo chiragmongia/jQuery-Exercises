@@ -6,6 +6,7 @@ ProductGrid.prototype = {
   init: function() {
     this.filters = $('.filter');
     this.container = $('#container');
+    this.paginateOptions = $('#paginateOptions');
     this.fetchJsonData();
     this.bindEvents();
   },
@@ -17,7 +18,7 @@ ProductGrid.prototype = {
 
   filtersListener: function() {
     var obj = this;
-    $('.checkbox, .selectOption').bind('change', function() {
+    $('.productFilter').bind('change', function() {
       obj.filterData();
     });    
   },
@@ -43,7 +44,8 @@ ProductGrid.prototype = {
         alert("PROBLEM");
       },
       complete: function() {
-        obj.createPageFooter($('.productGrid'));
+        obj.allProducts = $('.productGrid');
+        obj.createPageFooter(obj.allProducts);
       }
     });
 
@@ -87,18 +89,15 @@ ProductGrid.prototype = {
   },
 
   getTotalPages: function(filteredProducts, paginateValue) {
-    var totalPages = Math.floor((filteredProducts.length)/paginateValue);
-    if ((filteredProducts.length) % paginateValue == 0)
-      return totalPages;
-    else
-      return totalPages + 1;
+    return Math.ceil((filteredProducts.length)/paginateValue);
   },
 
   createPageFooter: function(filteredProducts) {
-    var paginateValue = $('.selectOption').val();
+    var paginateValue = this.paginateOptions.val();
     var totalPages = this.getTotalPages(filteredProducts, paginateValue);
     this.createPageFooterElements(totalPages);
-    this.showFilteredProducts(filteredProducts, paginateValue);
+    $('.page-numbers:first').addClass('highlight');
+    this.showFilteredProducts(filteredProducts, 0, paginateValue);
   },
 
   createPageFooterElements: function(totalPages) {
@@ -119,23 +118,17 @@ ProductGrid.prototype = {
     return (parseInt(selectedPageNumber) - 1) * parseInt(paginateValue);
   },
 
-  getFinalValueOfDisplayedProducts: function(selectedPageNumber, paginateValue) {
-    return parseInt(selectedPageNumber) * parseInt(paginateValue);
-  },
-
   pageNumberListener: function(selectedPageNumber) {
-    var paginateValue = $('.selectOption').val();
+    var paginateValue = this.paginateOptions.val();
     var initialValue = this.getInitialValueOfDisplayedProducts(selectedPageNumber, paginateValue);
-    var finalValue = this.getFinalValueOfDisplayedProducts(selectedPageNumber, paginateValue);
-    var filteredProducts = this.filteredProducts || $('.productGrid');
-    $('.productGrid').hide();
-    filteredProducts.slice(initialValue, finalValue).show();
+    var finalValue = initialValue + parseInt(paginateValue);
+    var filteredProducts = this.filteredProducts || this.allProducts;
+    this.showFilteredProducts(filteredProducts, initialValue, finalValue);
   },
 
-  showFilteredProducts: function(filteredProducts, paginateValue) {
-    $('.productGrid').hide();
-    $('.page-numbers:first').addClass('highlight');
-    $(filteredProducts).slice(0, paginateValue).show();
+  showFilteredProducts: function(filteredProducts, initialValue, finalValue) {
+    this.allProducts.filter(':visible').hide();
+    $(filteredProducts).slice(initialValue, finalValue).show();
   }
 }
 
